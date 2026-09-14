@@ -5,6 +5,8 @@ const props = withDefaults(
   defineProps<{
     to?: string
     href?: string
+    /** A download link stays in this tab — a new one would be left blank. */
+    download?: boolean
     variant?: 'primary' | 'secondary' | 'ghost'
     size?: 'sm' | 'md' | 'lg'
   }>(),
@@ -39,7 +41,7 @@ const external = computed(() => Boolean(props.href))
   <a
     v-if="external"
     :href="href"
-    target="_blank"
+    :target="download ? undefined : '_blank'"
     rel="noopener noreferrer"
     :class="classes"
   >

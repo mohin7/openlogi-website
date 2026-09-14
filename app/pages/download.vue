@@ -4,6 +4,30 @@ const current = computed(
   () => installTargets.find((t) => t.id === selected.value) ?? installTargets[0]!,
 )
 
+// Preselect the visitor's distro. Done on mount rather than during render
+// because the page is prerendered — the HTML is built once, with no visitor
+// to detect, so reading the user agent any earlier would bake one distro into
+// the static file for everyone.
+const detected = ref(false)
+onMounted(() => {
+  const ua = navigator.userAgent
+  const match = installTargets.find((t) => t.detect?.test(ua))
+  if (match) {
+    selected.value = match.id
+    detected.value = true
+  }
+})
+
+/** Download the package and hand it to the system installer in one step. */
+const oneLiner = computed(() => {
+  const url = assetUrl(current.value.file)
+  if (current.value.id === 'deb')
+    return `curl -fLO ${url} \\\n  && sudo apt install ./${current.value.file}`
+  if (current.value.id === 'rpm')
+    return `curl -fLO ${url} \\\n  && sudo dnf install ./${current.value.file}`
+  return undefined
+})
+
 useSeoMeta({
   title: 'Download',
   description:
@@ -70,29 +94,61 @@ defineOgImageComponent('Default', {
         </div>
 
         <div class="card card-lit mt-6 p-6">
-          <p class="text-sm font-medium">
-            Install on {{ current.label }}
-          </p>
-          <p class="mt-1 text-[13px] text-ink-3">
-            {{
-              current.id === 'source'
-                ? 'Requires a Rust toolchain and Node.js 20 or newer.'
-                : 'Download the package, then run this in the same directory.'
-            }}
-          </p>
-          <CodeBlock class="mt-4" :code="current.command" label="terminal" />
-
-          <div
-            v-if="current.id !== 'source'"
-            class="mt-4 flex flex-wrap items-center gap-3"
-          >
-            <UiButton :href="`${site.repo}/releases/latest`">
-              <Icon name="lucide:download" class="size-4" />
-              Get {{ current.file }}
-            </UiButton>
-            <span class="text-[13px] text-ink-3">x86_64 · from GitHub Releases</span>
+          <div class="flex flex-wrap items-baseline justify-between gap-2">
+            <p class="text-sm font-medium">
+              Install on {{ current.label }}
+            </p>
+            <p v-if="detected" class="text-[13px] text-ink-3">
+              Detected from your browser
+            </p>
           </div>
+
+          <!-- Packaged distros: one click downloads the file itself. -->
+          <template v-if="current.id === 'deb' || current.id === 'rpm'">
+            <div class="mt-4 flex flex-wrap items-center gap-3">
+              <UiButton :href="assetUrl(current.file)" download>
+                <Icon name="lucide:download" class="size-4" />
+                Download for {{ current.label }}
+              </UiButton>
+              <span class="text-[13px] text-ink-3">
+                {{ current.file }} · x86_64
+              </span>
+            </div>
+            <p class="mt-3 text-[13px] text-ink-3">
+              Then install it from the directory you saved it in:
+            </p>
+            <CodeBlock class="mt-2" :code="current.command" label="terminal" />
+
+            <details class="group mt-4">
+              <summary
+                class="cursor-pointer text-[13px] text-ink-3 transition-colors hover:text-ink-2"
+              >
+                Or do both in one command
+              </summary>
+              <CodeBlock class="mt-3" :code="oneLiner!" label="terminal" />
+            </details>
+          </template>
+
+          <!-- Arch and source install from a command, so there is no file. -->
+          <template v-else>
+            <p class="mt-1 text-[13px] text-ink-3">
+              {{
+                current.id === 'source'
+                  ? 'Requires a Rust toolchain and Node.js 20 or newer.'
+                  : 'Installs from the AUR, and updates with your system.'
+              }}
+            </p>
+            <CodeBlock class="mt-4" :code="current.command" label="terminal" />
+          </template>
         </div>
+
+        <p class="mt-4 text-center text-[13px] text-ink-3">
+          All packages are published on
+          <a
+            :href="`${site.repo}/releases/latest`"
+            class="text-ink-2 underline underline-offset-4 transition-colors hover:text-ink"
+          >GitHub Releases</a>, including checksums and older versions.
+        </p>
       </div>
 
       <!-- After install -->

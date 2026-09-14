@@ -73,7 +73,18 @@ export const capabilities = [
   { id: '0x2201', name: 'Adjustable DPI', note: 'Onboard sensitivity' },
 ] as const
 
-/** Distro install targets on the download page. */
+/**
+ * Distro install targets on the download page.
+ *
+ * `file` is the release asset name; it is appended to the /releases/latest/
+ * download/ redirect, which GitHub resolves to the newest release. That keeps
+ * the link correct across versions without editing this file — the asset names
+ * just have to keep matching whatever the release workflow produces.
+ *
+ * `detect` matches navigator.userAgent so the visitor's distro is preselected.
+ * Only Ubuntu and Fedora identify themselves there; everything else falls back
+ * to the default tab, which is why no Arch pattern is listed.
+ */
 export const installTargets = [
   {
     id: 'deb',
@@ -81,6 +92,7 @@ export const installTargets = [
     icon: 'simple-icons:debian',
     file: 'openlogi_0.1.0_amd64.deb',
     command: 'sudo apt install ./openlogi_0.1.0_amd64.deb',
+    detect: /ubuntu|debian/i,
   },
   {
     id: 'rpm',
@@ -88,6 +100,7 @@ export const installTargets = [
     icon: 'simple-icons:fedora',
     file: 'openlogi-0.1.0-1.x86_64.rpm',
     command: 'sudo dnf install ./openlogi-0.1.0-1.x86_64.rpm',
+    detect: /fedora|red hat|rhel/i,
   },
   {
     id: 'arch',
@@ -95,6 +108,7 @@ export const installTargets = [
     icon: 'simple-icons:archlinux',
     file: 'openlogi-bin',
     command: 'yay -S openlogi-bin',
+    detect: undefined,
   },
   {
     id: 'source',
@@ -103,8 +117,16 @@ export const installTargets = [
     file: 'git',
     command:
       'git clone https://github.com/mohin7/openlogi\ncd openlogi\n./scripts/setup.sh',
+    detect: undefined,
   },
 ] as const
+
+/**
+ * A direct link to a release asset. GitHub redirects /releases/latest/download/
+ * to the newest release, so this never names a version.
+ */
+export const assetUrl = (file: string) =>
+  `${site.repo}/releases/latest/download/${file}`
 
 export const faqs = [
   {
