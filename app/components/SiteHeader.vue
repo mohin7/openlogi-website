@@ -52,6 +52,7 @@ onMounted(() => {
       </nav>
 
       <div class="hidden items-center gap-2 md:flex">
+        <ThemeToggle />
         <UiButton :href="site.repo" variant="ghost" size="sm">
           <Icon name="simple-icons:github" class="size-4" />
           GitHub
@@ -59,16 +60,19 @@ onMounted(() => {
         <UiButton to="/download" size="sm">Download</UiButton>
       </div>
 
-      <button
+      <div class="flex items-center gap-1 md:hidden">
+        <ThemeToggle />
+        <button
         type="button"
-        class="-mr-2 inline-flex size-10 items-center justify-center rounded-lg text-ink-2 transition-colors hover:bg-surface-2 hover:text-ink md:hidden"
+        class="-mr-2 inline-flex size-10 items-center justify-center rounded-lg text-ink-2 transition-colors hover:bg-surface-2 hover:text-ink"
         :aria-expanded="open"
         aria-controls="mobile-nav"
         :aria-label="open ? 'Close menu' : 'Open menu'"
         @click="open = !open"
       >
         <Icon :name="open ? 'lucide:x' : 'lucide:menu'" class="size-5" />
-      </button>
+        </button>
+      </div>
     </div>
 
     <Transition

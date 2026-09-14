@@ -42,7 +42,13 @@ export default defineNuxtConfig({
       markdown: {
         toc: { depth: 3, searchDepth: 3 },
         highlight: {
-          theme: { default: 'github-dark-dimmed' },
+          // Two themes: shiki emits the dark colours as CSS variables that
+          // main.css switches under .dark, so code follows the page instead
+          // of staying dark on a white background.
+          theme: {
+            default: 'github-light',
+            dark: 'github-dark-dimmed',
+          },
           langs: ['bash', 'rust', 'toml', 'json', 'ts', 'vue', 'ini', 'diff'],
         },
       },
@@ -63,8 +69,19 @@ export default defineNuxtConfig({
 
   app: {
     head: {
+      // Prerendered as dark; the script below corrects it before first paint
+      // for anyone who chose light or whose OS asks for it.
       htmlAttrs: { lang: 'en', class: 'dark' },
       link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
+      script: [
+        {
+          // Must run synchronously in <head>: any later and the dark palette
+          // has already painted, which shows as a flash on a light-theme load.
+          // Deliberately tiny and dependency-free for the same reason.
+          innerHTML: `(function(){try{var s=localStorage.getItem('openlogi-theme');var d=s?s==='dark':!window.matchMedia('(prefers-color-scheme: light)').matches;document.documentElement.classList.toggle('dark',d);document.documentElement.style.colorScheme=d?'dark':'light'}catch(e){}})()`,
+          tagPosition: 'head',
+        },
+      ],
     },
   },
 

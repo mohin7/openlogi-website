@@ -205,7 +205,7 @@ defineOgImageComponent('Default', {
   overflow-x: auto;
   border-radius: 0.75rem;
   border: 1px solid var(--color-line);
-  background: #0a0c10 !important;
+  background: var(--color-code-bg) !important;
   padding: 1rem 1.125rem;
   font-family: var(--font-mono);
   font-size: 0.8125rem;

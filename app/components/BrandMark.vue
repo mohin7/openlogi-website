@@ -30,13 +30,15 @@
       class="text-accent"
     />
     <defs>
+      <!-- Token-driven so the mark inverts with the theme rather than staying
+           a dark tile on a white page. -->
       <linearGradient id="ol-bg" x1="0" y1="0" x2="32" y2="32">
-        <stop stop-color="#12151c" />
-        <stop offset="1" stop-color="#0d0f14" />
+        <stop stop-color="var(--color-surface-2)" />
+        <stop offset="1" stop-color="var(--color-surface)" />
       </linearGradient>
       <linearGradient id="ol-edge" x1="16" y1="0" x2="16" y2="32">
-        <stop stop-color="#2a2f3c" />
-        <stop offset="1" stop-color="#1e222c" />
+        <stop stop-color="var(--color-line-strong)" />
+        <stop offset="1" stop-color="var(--color-line)" />
       </linearGradient>
     </defs>
   </svg>

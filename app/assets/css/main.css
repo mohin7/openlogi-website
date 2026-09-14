@@ -10,6 +10,53 @@
    contrast stays predictable no matter how components nest.
 --------------------------------------------------------------------------- */
 @theme {
+  /* Tailwind needs the token names at build time to generate utilities. The
+     values here are the light palette; `.dark` below overrides every one of
+     them. Anything that is not a colour is theme-independent and is only
+     declared once. */
+  --color-canvas: #ffffff;
+  --color-surface: #f7f8fa;
+  --color-surface-2: #eef0f4;
+  --color-surface-3: #e4e7ed;
+
+  --color-line: #e2e5eb;
+  --color-line-strong: #cdd2db;
+
+  --color-ink: #0d1117;
+  --color-ink-2: #4a5263;
+  --color-ink-3: #6d7585;
+  --color-ink-4: #949bab;
+
+  --color-accent: #2563eb;
+  --color-accent-hover: #1d4ed8;
+  --color-accent-dim: #dbe6fe;
+  --color-accent-glow: #2563eb1f;
+
+  --color-success: #0f9d58;
+  --color-warn: #b45309;
+
+  /* The code-block ground. Darker than the canvas in light mode so syntax
+     highlighting keeps its contrast; near-black in dark mode. */
+  --color-code-bg: #f4f5f8;
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+
+  /* Tight, display-weight tracking for headlines. */
+  --tracking-display: -0.032em;
+
+  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-pulse-ring: pulse-ring 3s var(--ease-out-quint) infinite;
+  --animate-float: float 6s ease-in-out infinite;
+}
+
+/* The original palette: a single near-black canvas with a cool blue accent.
+   Greys are very slightly blue-shifted rather than pure neutral — pure #111
+   on a wide-gamut display reads as a dead hole, while a few degrees of blue
+   reads as "engineered". */
+.dark {
   --color-canvas: #08090c;
   --color-surface: #0d0f14;
   --color-surface-2: #12151c;
@@ -31,17 +78,7 @@
   --color-success: #39d98a;
   --color-warn: #ffb224;
 
-  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
-
-  /* Tight, display-weight tracking for headlines. */
-  --tracking-display: -0.032em;
-
-  --ease-out-quint: cubic-bezier(0.22, 1, 0.36, 1);
-
-  --animate-marquee: marquee 40s linear infinite;
-  --animate-pulse-ring: pulse-ring 3s var(--ease-out-quint) infinite;
-  --animate-float: float 6s ease-in-out infinite;
+  --color-code-bg: #0a0c10;
 }
 
 @keyframes marquee {
@@ -151,9 +188,18 @@
 }
 
 /* A 1px top highlight — the trick that makes dark cards read as raised
-   rather than as holes cut in the page. */
+   rather than as holes cut in the page. On white there is nothing to catch
+   the light, so the same lift comes from a soft drop shadow instead; the
+   highlight is re-enabled under .dark. */
 @utility card-lit {
-  &::before {
+  box-shadow: 0 1px 2px color-mix(in oklab, var(--color-ink) 5%, transparent),
+              0 8px 24px -12px color-mix(in oklab, var(--color-ink) 12%, transparent);
+
+  .dark & {
+    box-shadow: none;
+  }
+
+  .dark &::before {
     content: '';
     position: absolute;
     inset-inline: 0;
@@ -166,6 +212,17 @@
       transparent
     );
   }
+}
+
+/* Shiki writes both themes into every token: the default colour inline and the
+   dark one as --shiki-dark. Swapping them under .dark is what makes syntax
+   highlighting follow the theme. */
+.dark .shiki,
+.dark .shiki span {
+  color: var(--shiki-dark) !important;
+  font-style: var(--shiki-dark-font-style) !important;
+  font-weight: var(--shiki-dark-font-weight) !important;
+  text-decoration: var(--shiki-dark-text-decoration) !important;
 }
 
 @utility grid-bg {

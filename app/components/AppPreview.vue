@@ -61,16 +61,16 @@ const current = computed(
 
 <template>
   <div
-    class="card card-lit overflow-hidden shadow-[0_32px_80px_-24px_rgba(0,0,0,0.8)]"
+    class="card card-lit overflow-hidden shadow-[0_32px_80px_-24px_color-mix(in_oklab,var(--color-ink)_22%,transparent)]"
   >
     <!-- Title bar -->
     <div
       class="flex items-center gap-3 border-b border-line bg-surface-2 px-4 py-3"
     >
       <div class="flex gap-1.5" aria-hidden="true">
-        <span class="size-3 rounded-full bg-[#3a3f4b]" />
-        <span class="size-3 rounded-full bg-[#3a3f4b]" />
-        <span class="size-3 rounded-full bg-[#3a3f4b]" />
+        <span class="size-3 rounded-full bg-line-strong" />
+        <span class="size-3 rounded-full bg-line-strong" />
+        <span class="size-3 rounded-full bg-line-strong" />
       </div>
       <div class="flex items-center gap-2 text-xs font-medium text-ink-3">
         <BrandMark class="size-4" />
@@ -134,8 +134,8 @@ const current = computed(
             />
             <defs>
               <linearGradient id="mouse-body" x1="60" y1="6" x2="60" y2="144">
-                <stop stop-color="#181c25" />
-                <stop offset="1" stop-color="#0d0f14" />
+                <stop stop-color="var(--color-surface-3)" />
+                <stop offset="1" stop-color="var(--color-surface)" />
               </linearGradient>
             </defs>
           </svg>
