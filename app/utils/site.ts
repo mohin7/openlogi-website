@@ -8,7 +8,7 @@ export const site = {
   description:
     'Configure Logitech mice and keyboards natively on Linux. No proprietary software, no sudo, no cloud account.',
   repo: 'https://github.com/mohin7/openlogi',
-  version: '1.0.0',
+  version: '0.1.0',
   licence: 'GPL-3.0-or-later',
 } as const
 
