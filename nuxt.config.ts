@@ -25,7 +25,7 @@ export default defineNuxtConfig({
   },
 
   site: {
-    url: 'https://openlogi.app',
+    url: 'https://openlogi.uxatom.com',
     name: 'OpenLogi',
     description:
       'Configure Logitech mice and keyboards natively on Linux. No proprietary software, no sudo, no cloud account.',

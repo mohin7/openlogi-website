@@ -13,6 +13,8 @@ defineOgImageComponent('Default', {
   description: 'Remap buttons, set DPI, read battery. No sudo, no account.',
 })
 
+// The FAQ is rendered on this page, so it is declared here too — Google only
+// grants the rich result when the answers are visible on the same URL.
 useSchemaOrg([
   defineSoftwareApp({
     name: site.name,
@@ -21,6 +23,7 @@ useSchemaOrg([
     operatingSystem: 'Linux',
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
   }),
+  ...faqs.map((f) => defineQuestion({ name: f.q, acceptedAnswer: f.a })),
 ])
 </script>
 
