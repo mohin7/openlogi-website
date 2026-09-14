@@ -18,15 +18,8 @@ onMounted(() => {
   }
 })
 
-/** Download the package and hand it to the system installer in one step. */
-const oneLiner = computed(() => {
-  const url = assetUrl(current.value.file)
-  if (current.value.id === 'deb')
-    return `curl -fLO ${url} \\\n  && sudo apt install ./${current.value.file}`
-  if (current.value.id === 'rpm')
-    return `curl -fLO ${url} \\\n  && sudo dnf install ./${current.value.file}`
-  return undefined
-})
+/** The from-source route, shown for distros that have no package yet. */
+const sourceTarget = installTargets.find((t) => t.id === 'source')!
 
 useSeoMeta({
   title: 'Download',
@@ -103,8 +96,8 @@ defineOgImageComponent('Default', {
             </p>
           </div>
 
-          <!-- Packaged distros: one click downloads the file itself. -->
-          <template v-if="current.id === 'deb' || current.id === 'rpm'">
+          <!-- A published package: install it with the system package manager. -->
+          <template v-if="current.ready && current.id !== 'source'">
             <div class="mt-4 flex flex-wrap items-center gap-3">
               <UiButton :href="assetUrl(current.file)" download>
                 <Icon name="lucide:download" class="size-4" />
@@ -118,36 +111,37 @@ defineOgImageComponent('Default', {
               Then install it from the directory you saved it in:
             </p>
             <CodeBlock class="mt-2" :code="current.command" label="terminal" />
-
-            <details class="group mt-4">
-              <summary
-                class="cursor-pointer text-[13px] text-ink-3 transition-colors hover:text-ink-2"
-              >
-                Or do both in one command
-              </summary>
-              <CodeBlock class="mt-3" :code="oneLiner!" label="terminal" />
-            </details>
           </template>
 
-          <!-- Arch and source install from a command, so there is no file. -->
+          <!-- No package yet: say so plainly and give the route that works. -->
+          <template v-else-if="!current.ready">
+            <p class="mt-1 text-[13px] text-ink-3">
+              There is no {{ current.label }} package yet. Version
+              {{ site.version }} ships as source, and builds in a few minutes:
+            </p>
+            <CodeBlock class="mt-4" :code="sourceTarget.command" label="terminal" />
+            <p class="mt-3 text-[13px] text-ink-3">
+              Needs a Rust toolchain and Node.js 20 or newer.
+              <code class="font-mono text-ink">setup.sh</code> installs the udev
+              rule for you.
+            </p>
+          </template>
+
+          <!-- The source tab itself. -->
           <template v-else>
             <p class="mt-1 text-[13px] text-ink-3">
-              {{
-                current.id === 'source'
-                  ? 'Requires a Rust toolchain and Node.js 20 or newer.'
-                  : 'Installs from the AUR, and updates with your system.'
-              }}
+              Requires a Rust toolchain and Node.js 20 or newer.
             </p>
             <CodeBlock class="mt-4" :code="current.command" label="terminal" />
           </template>
         </div>
 
         <p class="mt-4 text-center text-[13px] text-ink-3">
-          All packages are published on
+          Packaged builds are on the way. Releases are published on
           <a
             :href="`${site.repo}/releases/latest`"
             class="text-ink-2 underline underline-offset-4 transition-colors hover:text-ink"
-          >GitHub Releases</a>, including checksums and older versions.
+          >GitHub</a>.
         </p>
       </div>
 

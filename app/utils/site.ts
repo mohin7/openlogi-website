@@ -8,7 +8,7 @@ export const site = {
   description:
     'Configure Logitech mice and keyboards natively on Linux. No proprietary software, no sudo, no cloud account.',
   repo: 'https://github.com/mohin7/openlogi',
-  version: '0.1.0',
+  version: '1.0.0',
   licence: 'GPL-3.0-or-later',
 } as const
 
@@ -76,10 +76,11 @@ export const capabilities = [
 /**
  * Distro install targets on the download page.
  *
- * `file` is the release asset name; it is appended to the /releases/latest/
- * download/ redirect, which GitHub resolves to the newest release. That keeps
- * the link correct across versions without editing this file — the asset names
- * just have to keep matching whatever the release workflow produces.
+ * `ready: false` means no package is published for that distro yet — the latest
+ * release carries source archives only. Those targets show the from-source
+ * route instead of a download link, because a button that 404s is worse than
+ * no button. Set `ready: true` and fill in `file` once the release workflow
+ * actually attaches a built package.
  *
  * `detect` matches navigator.userAgent so the visitor's distro is preselected.
  * Only Ubuntu and Fedora identify themselves there; everything else falls back
@@ -90,30 +91,34 @@ export const installTargets = [
     id: 'deb',
     label: 'Debian / Ubuntu',
     icon: 'simple-icons:debian',
-    file: 'openlogi_0.1.0_amd64.deb',
-    command: 'sudo apt install ./openlogi_0.1.0_amd64.deb',
+    ready: false,
+    file: '',
+    command: '',
     detect: /ubuntu|debian/i,
   },
   {
     id: 'rpm',
     label: 'Fedora / RHEL',
     icon: 'simple-icons:fedora',
-    file: 'openlogi-0.1.0-1.x86_64.rpm',
-    command: 'sudo dnf install ./openlogi-0.1.0-1.x86_64.rpm',
+    ready: false,
+    file: '',
+    command: '',
     detect: /fedora|red hat|rhel/i,
   },
   {
     id: 'arch',
     label: 'Arch Linux',
     icon: 'simple-icons:archlinux',
-    file: 'openlogi-bin',
-    command: 'yay -S openlogi-bin',
+    ready: false,
+    file: '',
+    command: '',
     detect: undefined,
   },
   {
     id: 'source',
     label: 'From source',
     icon: 'lucide:terminal',
+    ready: true,
     file: 'git',
     command:
       'git clone https://github.com/mohin7/openlogi\ncd openlogi\n./scripts/setup.sh',
