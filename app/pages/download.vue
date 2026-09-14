@@ -18,9 +18,6 @@ onMounted(() => {
   }
 })
 
-/** The from-source route, shown for distros that have no package yet. */
-const sourceTarget = installTargets.find((t) => t.id === 'source')!
-
 useSeoMeta({
   title: 'Download',
   description:
@@ -96,38 +93,44 @@ defineOgImageComponent('Default', {
             </p>
           </div>
 
-          <!-- A published package: install it with the system package manager. -->
+          <!-- A downloadable build: offer the file, then what to do with it. -->
           <template v-if="current.ready && current.id !== 'source'">
             <div class="mt-4 flex flex-wrap items-center gap-3">
               <UiButton :href="assetUrl(current.file)" download>
                 <Icon name="lucide:download" class="size-4" />
-                Download for {{ current.label }}
+                Download {{ current.id === 'appimage' ? 'AppImage' : current.label }}
               </UiButton>
-              <span class="text-[13px] text-ink-3">
+              <span class="font-mono text-[12px] text-ink-3">
                 {{ current.file }} · x86_64
               </span>
             </div>
             <p class="mt-3 text-[13px] text-ink-3">
-              Then install it from the directory you saved it in:
+              {{
+                current.id === 'appimage'
+                  ? 'Then make it executable and run it — no installation needed:'
+                  : 'Then install it from the directory you saved it in:'
+              }}
             </p>
             <CodeBlock class="mt-2" :code="current.command" label="terminal" />
+
+            <!-- The AppImage runs no install script, so the udev rule that
+                 makes device access work is not set up. Saying so here avoids
+                 the obvious "it does not detect my mouse" report. -->
+            <p
+              v-if="current.id === 'appimage'"
+              class="mt-3 flex gap-2 text-[13px] text-ink-3"
+            >
+              <Icon name="lucide:info" class="mt-0.5 size-3.5 shrink-0 text-accent" />
+              <span>
+                The AppImage runs no install step, so the udev rule is not
+                added for you. Run
+                <code class="font-mono text-ink">sudo ./scripts/install-udev-rules.sh</code>
+                from the repository once, then log out and back in.
+              </span>
+            </p>
           </template>
 
-          <!-- No package yet: say so plainly and give the route that works. -->
-          <template v-else-if="!current.ready">
-            <p class="mt-1 text-[13px] text-ink-3">
-              There is no {{ current.label }} package yet. Version
-              {{ site.version }} ships as source, and builds in a few minutes:
-            </p>
-            <CodeBlock class="mt-4" :code="sourceTarget.command" label="terminal" />
-            <p class="mt-3 text-[13px] text-ink-3">
-              Needs a Rust toolchain and Node.js 20 or newer.
-              <code class="font-mono text-ink">setup.sh</code> installs the udev
-              rule for you.
-            </p>
-          </template>
-
-          <!-- The source tab itself. -->
+          <!-- The source tab. -->
           <template v-else>
             <p class="mt-1 text-[13px] text-ink-3">
               Requires a Rust toolchain and Node.js 20 or newer.
@@ -137,11 +140,15 @@ defineOgImageComponent('Default', {
         </div>
 
         <p class="mt-4 text-center text-[13px] text-ink-3">
-          Packaged builds are on the way. Releases are published on
+          Version {{ site.version }} · all releases on
           <a
-            :href="`${site.repo}/releases/latest`"
+            :href="`${site.repo}/releases`"
             class="text-ink-2 underline underline-offset-4 transition-colors hover:text-ink"
-          >GitHub</a>.
+          >GitHub</a>, with
+          <a
+            :href="assetUrl('SHA256SUMS')"
+            class="text-ink-2 underline underline-offset-4 transition-colors hover:text-ink"
+          >checksums</a>.
         </p>
       </div>
 

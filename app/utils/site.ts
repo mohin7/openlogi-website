@@ -2,13 +2,21 @@
 // Copy drifts fast on marketing sites; keeping it here means the version
 // number in the nav and the one in the download page can never disagree.
 
+/**
+ * The released version. Must match `version` in the app's
+ * apps/desktop/src-tauri/tauri.conf.json — the release workflow refuses to
+ * build when a tag and that file disagree, and the asset filenames below are
+ * derived from this, so a stale value here produces 404 download links.
+ */
+export const version = '0.1.0'
+
 export const site = {
   name: 'OpenLogi',
   tagline: 'Logitech devices, natively on Linux.',
   description:
     'Configure Logitech mice and keyboards natively on Linux. No proprietary software, no sudo, no cloud account.',
   repo: 'https://github.com/mohin7/openlogi',
-  version: '0.1.0',
+  version,
   licence: 'GPL-3.0-or-later',
 } as const
 
@@ -91,28 +99,30 @@ export const installTargets = [
     id: 'deb',
     label: 'Debian / Ubuntu',
     icon: 'simple-icons:debian',
-    ready: false,
-    file: '',
-    command: '',
+    ready: true,
+    file: `openlogi_${version}_amd64.deb`,
+    command: `sudo apt install ./openlogi_${version}_amd64.deb`,
     detect: /ubuntu|debian/i,
   },
   {
     id: 'rpm',
     label: 'Fedora / RHEL',
     icon: 'simple-icons:fedora',
-    ready: false,
-    file: '',
-    command: '',
+    ready: true,
+    file: `openlogi-${version}-1.x86_64.rpm`,
+    command: `sudo dnf install ./openlogi-${version}-1.x86_64.rpm`,
     detect: /fedora|red hat|rhel/i,
   },
   {
-    id: 'arch',
-    label: 'Arch Linux',
-    icon: 'simple-icons:archlinux',
-    ready: false,
-    file: '',
-    command: '',
-    detect: undefined,
+    // The AppImage is the answer for every distro without a native package,
+    // Arch included. It needs no package manager and no install step.
+    id: 'appimage',
+    label: 'AppImage',
+    icon: 'lucide:package',
+    ready: true,
+    file: `OpenLogi_${version}_amd64.AppImage`,
+    command: `chmod +x OpenLogi_${version}_amd64.AppImage\n./OpenLogi_${version}_amd64.AppImage`,
+    detect: /arch|manjaro|endeavour/i,
   },
   {
     id: 'source',
