@@ -23,8 +23,8 @@ const year = new Date().getFullYear()
 </script>
 
 <template>
-  <footer class="border-t border-line bg-surface/50">
-    <div class="container-page py-16">
+  <footer class="rule-t bg-surface/40">
+    <div class="frame py-16">
       <div class="grid gap-12 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
         <div>
           <NuxtLink to="/" class="flex items-center gap-2.5 font-semibold">
@@ -48,7 +48,7 @@ const year = new Date().getFullYear()
         </div>
 
         <div v-for="col in columns" :key="col.title">
-          <h3 class="text-xs font-semibold tracking-wider text-ink uppercase">
+          <h3 class="caption text-ink!">
             {{ col.title }}
           </h3>
           <ul class="mt-4 space-y-3">
@@ -64,7 +64,7 @@ const year = new Date().getFullYear()
         </div>
 
         <div>
-          <h3 class="text-xs font-semibold tracking-wider text-ink uppercase">
+          <h3 class="caption text-ink!">
             Project
           </h3>
           <ul class="mt-4 space-y-3">
@@ -105,10 +105,10 @@ const year = new Date().getFullYear()
       <div
         class="mt-14 flex flex-col gap-4 border-t border-line pt-8 sm:flex-row sm:items-center sm:justify-between"
       >
-        <p class="text-sm text-ink-4">
+        <p class="caption normal-case! tracking-normal!">
           © {{ year }} OpenLogi · {{ site.licence }}
         </p>
-        <p class="text-sm text-ink-4">
+        <p class="caption normal-case! tracking-normal!">
           Not affiliated with or endorsed by Logitech.
         </p>
       </div>

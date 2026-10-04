@@ -61,7 +61,7 @@ const current = computed(
 
 <template>
   <div
-    class="card card-lit overflow-hidden shadow-[0_32px_80px_-24px_color-mix(in_oklab,var(--color-ink)_22%,transparent)]"
+    class="card overflow-hidden bg-canvas shadow-[0_24px_60px_-28px_color-mix(in_oklab,var(--color-ink)_30%,transparent)]"
   >
     <!-- Title bar -->
     <div

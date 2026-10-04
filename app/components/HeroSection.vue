@@ -1,38 +1,70 @@
 <script setup lang="ts">
 const el = useReveal()
+
+// The first thing a visitor reads is the protocol and every way it connects —
+// the same facts the transport strip used to state lower down, promoted
+// because they are the product's credibility in one line.
+const tags = ['HID++', 'Bolt', 'Unifying', 'Lightspeed', 'Bluetooth LE', 'USB']
+const formats = ['.deb', '.rpm', 'AppImage']
 </script>
 
 <template>
   <section class="relative overflow-hidden">
-    <!-- Ambient backdrop: a faint grid, masked so it fades out before it
-         reaches the content, plus one soft accent bloom behind the headline. -->
+    <!-- One faint grid, masked out well before the content. No colour bloom:
+         the accent is reserved for things the visitor can act on. -->
     <div class="pointer-events-none absolute inset-0" aria-hidden="true">
       <div
-        class="grid-bg absolute inset-0 opacity-[0.5] [mask-image:radial-gradient(ellipse_70%_50%_at_50%_0%,black,transparent)]"
-      />
-      <div
-        class="absolute top-[-20%] left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-accent/10 blur-[140px]"
+        class="grid-bg absolute inset-0 opacity-[0.45] [mask-image:radial-gradient(ellipse_60%_55%_at_50%_0%,black,transparent)]"
       />
     </div>
 
-    <div ref="el" class="container-page relative pt-20 pb-20 md:pt-28">
+    <div ref="el" class="frame relative pt-16 pb-0 md:pt-24">
       <div class="mx-auto max-w-3xl text-center">
-        <UiBadge tone="accent" icon="lucide:git-commit-horizontal">
-          Open source · GPL-3.0
-        </UiBadge>
+        <ul
+          class="caption flex flex-wrap items-center justify-center gap-x-4 gap-y-2 normal-case! tracking-normal!"
+          aria-label="Supported connections"
+        >
+          <li
+            v-for="(t, i) in tags"
+            :key="t"
+            class="flex items-center gap-4"
+            :class="i === 0 ? 'text-ink!' : ''"
+          >
+            <span v-if="i > 0" class="size-1 rounded-full bg-line-strong" />
+            {{ t }}
+          </li>
+        </ul>
 
         <h1
-          class="text-gradient mt-6 text-4xl leading-[1.05] font-semibold tracking-[var(--tracking-display)] text-balance sm:text-5xl md:text-[4rem]"
+          class="mt-8 text-[2.6rem] leading-[1.02] font-semibold tracking-[-0.04em] text-balance sm:text-6xl md:text-[4.5rem]"
         >
-          Logitech devices, natively on Linux
+          Logitech devices,
+          <span class="relative inline-block whitespace-nowrap">
+            natively
+            <svg
+              class="absolute -bottom-1 left-0 h-[0.28em] w-full text-accent"
+              viewBox="0 0 200 12"
+              preserveAspectRatio="none"
+              fill="none"
+              aria-hidden="true"
+            >
+              <path
+                d="M2 8.5C46 3 108 2.5 198 7"
+                stroke="currentColor"
+                stroke-width="3"
+                stroke-linecap="round"
+              />
+            </svg>
+          </span>
+          on Linux.
         </h1>
 
         <p
-          class="mx-auto mt-6 max-w-xl text-base leading-relaxed text-pretty text-ink-2 md:text-lg"
+          class="mx-auto mt-7 max-w-xl text-base leading-relaxed text-pretty text-ink-2 md:text-lg"
         >
           Remap buttons, set DPI and read real battery levels — without
-          proprietary software, without a cloud account, and without
-          <code class="font-mono text-ink">sudo</code>.
+          proprietary software, a cloud account, or
+          <code class="font-mono text-[0.92em] font-medium text-ink">sudo</code>.
         </p>
 
         <div
@@ -53,13 +85,28 @@ const el = useReveal()
           </UiButton>
         </div>
 
-        <p class="mt-5 font-mono text-xs text-ink-4">
-          Wayland and X11 · No telemetry · No account
+        <p
+          class="caption mt-7 flex flex-wrap items-center justify-center gap-x-3 gap-y-1.5 normal-case! tracking-normal!"
+        >
+          <Icon name="simple-icons:linux" class="size-3.5" />
+          <span v-for="(f, i) in formats" :key="f" class="flex items-center gap-3">
+            <span v-if="i > 0" class="text-line-strong">/</span>
+            {{ f }}
+          </span>
+          <span class="text-line-strong">·</span>
+          <span>{{ site.licence }}</span>
+        </p>
+        <p class="caption mt-2 normal-case! tracking-normal!">
+          Not affiliated with Logitech
         </p>
       </div>
 
-      <div class="mx-auto mt-16 max-w-4xl">
-        <AppPreview />
+      <!-- The stage: the app window sits on engineering paper, cropped by the
+           section rule so it reads as emerging from the page. -->
+      <div
+        class="dot-bg relative mx-auto mt-14 max-w-5xl rounded-t-2xl border border-b-0 border-line bg-surface/60 px-3 pt-3 md:mt-16 md:px-6 md:pt-6"
+      >
+        <AppPreview class="rounded-b-none! border-b-0" />
       </div>
     </div>
   </section>

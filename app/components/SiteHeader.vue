@@ -26,11 +26,11 @@ onMounted(() => {
     class="fixed inset-x-0 top-0 z-50 transition-all duration-300 ease-[var(--ease-out-quint)]"
     :class="
       scrolled
-        ? 'border-b border-line bg-canvas/80 backdrop-blur-xl'
-        : 'border-b border-transparent'
+        ? 'border-b border-line bg-canvas/85 backdrop-blur-xl'
+        : 'border-b border-line bg-canvas/60 backdrop-blur-md'
     "
   >
-    <div class="container-page flex h-16 items-center justify-between gap-6">
+    <div class="frame flex h-16 items-center justify-between gap-6">
       <NuxtLink
         to="/"
         class="flex items-center gap-2.5 text-[15px] font-semibold tracking-tight"
@@ -45,7 +45,8 @@ onMounted(() => {
           v-for="item in nav"
           :key="item.to"
           :to="item.to"
-          class="rounded-lg px-3 py-2 text-sm font-medium text-ink-2 transition-colors hover:bg-surface-2 hover:text-ink"
+          class="rounded-md px-3 py-2 text-[13px] font-medium text-ink-2 transition-colors hover:text-ink"
+          active-class="text-ink"
         >
           {{ item.label }}
         </NuxtLink>
@@ -53,10 +54,15 @@ onMounted(() => {
 
       <div class="hidden items-center gap-2 md:flex">
         <ThemeToggle />
-        <UiButton :href="site.repo" variant="ghost" size="sm">
+        <a
+          :href="site.repo"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex size-9 items-center justify-center rounded-lg border border-line bg-surface text-ink-3 transition-colors hover:border-line-strong hover:text-ink"
+          aria-label="OpenLogi on GitHub"
+        >
           <Icon name="simple-icons:github" class="size-4" />
-          GitHub
-        </UiButton>
+        </a>
         <UiButton to="/download" size="sm">Download</UiButton>
       </div>
 
@@ -86,7 +92,7 @@ onMounted(() => {
         id="mobile-nav"
         class="border-t border-line bg-canvas md:hidden"
       >
-        <nav class="container-page flex flex-col gap-1 py-4" aria-label="Mobile">
+        <nav class="frame flex flex-col gap-1 py-4" aria-label="Mobile">
           <NuxtLink
             v-for="item in nav"
             :key="item.to"

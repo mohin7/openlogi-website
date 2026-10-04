@@ -13,17 +13,30 @@ defineOgImageComponent('Default', {
   description: 'Remap buttons, set DPI, read battery. No sudo, no account.',
 })
 
-// The FAQ is rendered on this page, so it is declared here too — Google only
-// grants the rich result when the answers are visible on the same URL.
+// The FAQ is rendered on this page, so it is declared here too — the answers
+// must be visible on the same URL. The Questions have to hang off a FAQPage:
+// emitted as loose top-level nodes they are not a FAQ to anything that reads
+// the markup.
 useSchemaOrg([
   defineSoftwareApp({
     name: site.name,
     description: site.description,
     applicationCategory: 'UtilitiesApplication',
     operatingSystem: 'Linux',
+    softwareVersion: version,
+    downloadUrl: `${site.repo}/releases/latest`,
+    license: 'https://www.gnu.org/licenses/gpl-3.0.html',
+    isAccessibleForFree: true,
     offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
   }),
-  ...faqs.map((f) => defineQuestion({ name: f.q, acceptedAnswer: f.a })),
+  defineWebPage({
+    '@type': ['WebPage', 'FAQPage'],
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      'name': f.q,
+      'acceptedAnswer': { '@type': 'Answer', 'text': f.a },
+    })),
+  }),
 ])
 </script>
 

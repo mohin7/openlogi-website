@@ -34,8 +34,10 @@ const siblings = computed(() => {
   }
 })
 
+// "Installation" alone says nothing in a results page; the suffix says what
+// it is the installation of, and for which platform.
 useSeoMeta({
-  title: page.value.title,
+  title: `${page.value.title} · Linux docs`,
   description: page.value.description,
   ogTitle: `${page.value.title} · OpenLogi docs`,
   ogDescription: page.value.description,
@@ -145,8 +147,6 @@ defineOgImageComponent('Default', {
   font-size: 0.9375rem;
   line-height: 1.75;
 }
-
-.prose-docs h1 { display: none; } /* The page header already renders it. */
 
 .prose-docs h2 {
   margin-top: 3rem;

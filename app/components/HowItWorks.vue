@@ -30,32 +30,41 @@ const steps = [
 </script>
 
 <template>
-  <section class="border-t border-line bg-surface/40 py-24 md:py-32">
-    <div class="container-page">
+  <section class="rule-t">
+    <div class="frame py-20 md:py-28">
       <SectionHeading
         eyebrow="How it works"
         title="Four steps from plugged in to remapped"
         body="No kernel module, no patched driver, no reverse-engineered binary blob. Just the vendor protocol, spoken correctly."
+        caption="hidraw → uinput"
       />
+    </div>
 
-      <ol ref="el" class="mt-16 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <li
-          v-for="step in steps"
-          :key="step.n"
-          class="card card-lit flex flex-col p-6 hover:border-line-strong"
-        >
-          <span class="font-mono text-xs text-accent">{{ step.n }}</span>
-          <h3 class="mt-3 text-[15px] font-semibold">{{ step.title }}</h3>
-          <p class="mt-2.5 flex-1 text-sm leading-relaxed text-ink-2">
-            {{ step.body }}
-          </p>
-          <code
-            class="mt-5 block rounded-lg border border-line bg-canvas px-3 py-2 font-mono text-[11px] break-words text-ink-3"
+    <div class="border-t border-line">
+      <div class="frame !px-0">
+        <ol ref="el" class="grid gap-px bg-line md:grid-cols-2 lg:grid-cols-4">
+          <li
+            v-for="step in steps"
+            :key="step.n"
+            class="group flex flex-col bg-canvas p-6 pb-7 transition-colors hover:bg-surface"
           >
-            {{ step.code }}
-          </code>
-        </li>
-      </ol>
+            <span
+              class="flex size-8 items-center justify-center rounded-lg border border-line-strong bg-surface font-mono text-[11px] text-accent transition-colors group-hover:border-accent/50"
+            >
+              {{ step.n }}
+            </span>
+            <h3 class="mt-6 text-[15px] font-semibold tracking-tight">{{ step.title }}</h3>
+            <p class="mt-2.5 flex-1 text-sm leading-relaxed text-ink-2">
+              {{ step.body }}
+            </p>
+            <code
+              class="mt-6 block rounded-md border border-line bg-surface px-3 py-2 font-mono text-[11px] break-words text-ink-3"
+            >
+              {{ step.code }}
+            </code>
+          </li>
+        </ol>
+      </div>
     </div>
   </section>
 </template>

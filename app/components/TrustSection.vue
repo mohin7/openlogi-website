@@ -28,22 +28,13 @@ const points = [
 </script>
 
 <template>
-  <section class="relative overflow-hidden py-24 md:py-32">
-    <div
-      class="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-line-strong to-transparent"
-      aria-hidden="true"
-    />
-
-    <div class="container-page">
-      <div ref="el" class="grid gap-14 lg:grid-cols-2 lg:items-center">
-        <div>
-          <p
-            class="mb-4 font-mono text-xs tracking-[0.18em] text-accent uppercase"
-          >
-            Trust
-          </p>
+  <section class="rule-t">
+    <div ref="el" class="frame !px-0">
+      <div class="grid lg:grid-cols-[5fr_7fr]">
+        <div class="px-5 py-20 md:px-10 md:py-28 lg:border-r lg:border-line">
+          <p class="caption mb-4 text-accent!">Trust</p>
           <h2
-            class="text-gradient text-3xl font-semibold tracking-[var(--tracking-display)] text-balance sm:text-4xl"
+            class="text-3xl leading-[1.08] font-semibold tracking-[var(--tracking-display)] text-balance sm:text-4xl md:text-[2.5rem]"
           >
             A configuration tool should not be a security problem
           </h2>
@@ -61,17 +52,19 @@ const points = [
           </div>
         </div>
 
-        <ul class="grid gap-3 sm:grid-cols-2">
+        <ul class="grid gap-px bg-line max-lg:border-t max-lg:border-line sm:grid-cols-2">
           <li
             v-for="p in points"
             :key="p.title"
-            class="card card-lit p-5 hover:border-line-strong"
+            class="bg-canvas p-6 transition-colors hover:bg-surface md:p-8"
           >
-            <Icon :name="p.icon" class="size-5 text-accent" />
-            <h3 class="mt-4 text-sm font-semibold">{{ p.title }}</h3>
-            <p class="mt-2 text-[13px] leading-relaxed text-ink-2">
-              {{ p.body }}
-            </p>
+            <span
+              class="inline-flex size-9 items-center justify-center rounded-lg border border-line-strong bg-surface text-accent"
+            >
+              <Icon :name="p.icon" class="size-4" />
+            </span>
+            <h3 class="mt-5 text-sm font-semibold tracking-tight">{{ p.title }}</h3>
+            <p class="mt-2 text-[13px] leading-relaxed text-ink-2">{{ p.body }}</p>
           </li>
         </ul>
       </div>

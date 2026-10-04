@@ -30,32 +30,38 @@ export const nav = [
 /** Headline capabilities — the feature grid on the landing page. */
 export const features = [
   {
-    icon: 'lucide:mouse-pointer-click',
+    kind: 'remap',
+    spec: 'HID++ 0x1B04',
     title: 'Remap every button',
     body: 'Bind any reprogrammable control to a keystroke, a media key, a shell command, a URL, or a workspace switch. OpenLogi asks the firmware to divert the button, then synthesises whatever you mapped it to.',
   },
   {
-    icon: 'lucide:gauge',
+    kind: 'dpi',
+    spec: 'HID++ 0x2201',
     title: 'DPI written onboard',
     body: 'Sensitivity is stored in the device’s own flash, so it survives a reboot and keeps working with OpenLogi closed. Where firmware supports it, onboard always wins over host-side trickery.',
   },
   {
-    icon: 'lucide:battery-charging',
+    kind: 'battery',
+    spec: 'HID++ 0x1004',
     title: 'Real battery state',
     body: 'Charge level, charging status and capability are read straight from the device over HID++ — not estimated from voltage curves or guessed from a lookup table.',
   },
   {
-    icon: 'lucide:scan-search',
+    kind: 'discover',
+    spec: 'IRoot · IFeatureSet',
     title: 'Discovered, not hard-coded',
     body: 'Screens appear because your device reports the matching HID++ feature, never because its name is on a list. Plug in hardware released next year and the right controls show up.',
   },
   {
-    icon: 'lucide:shield-check',
+    kind: 'root',
+    spec: 'udev · uaccess',
     title: 'Never runs as root',
     body: 'The one privileged step is installing a udev rule. After that, access follows your login session through a uaccess ACL and is revoked when you log out.',
   },
   {
-    icon: 'lucide:layers',
+    kind: 'bus',
+    spec: 'swId · 4 bit',
     title: 'Shares the bus',
     body: 'A software id tag on every request means OpenLogi coexists with Solaar and fwupd instead of fighting them for the device. Run all three at once.',
   },
