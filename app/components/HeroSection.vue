@@ -56,7 +56,7 @@ const formats = ['.deb', '.rpm', 'AppImage']
               />
             </svg>
           </span>
-          on Linux.
+          on Linux
         </h1>
 
         <p
