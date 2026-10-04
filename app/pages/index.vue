@@ -1,11 +1,19 @@
 <script setup lang="ts">
 // The template in app.vue appends "· OpenLogi", so the title here is just the
 // distinguishing half — otherwise the brand name appears twice.
+//
+// It leads with what people actually search for. Most visitors arrive wanting
+// "Logitech Options+ on Linux" or an alternative to Solaar, and a title that
+// never says so can only be found by someone who already knows our name.
+const title = 'Logitech Options+ alternative for Linux'
+const description =
+  'Open-source Logitech Options+ alternative for Linux. Remap buttons, set DPI and read battery natively over HID++ — no sudo, no cloud account.'
+
 useSeoMeta({
-  title: 'Logitech devices, natively on Linux',
-  description: site.description,
-  ogTitle: 'OpenLogi — Logitech devices, natively on Linux',
-  ogDescription: site.description,
+  title,
+  description,
+  ogTitle: `OpenLogi — ${title}`,
+  ogDescription: description,
 })
 
 defineOgImageComponent('Default', {
