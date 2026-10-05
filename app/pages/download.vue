@@ -19,7 +19,7 @@ onMounted(() => {
 })
 
 useSeoMeta({
-  title: 'Download',
+  title: 'Download for Linux (.deb, .rpm, AppImage)',
   description:
     'Install OpenLogi on Debian, Ubuntu, Fedora, Arch Linux, or build it from source. Free and open source under GPL-3.0.',
 })

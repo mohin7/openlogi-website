@@ -1,6 +1,6 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: 'Supported devices',
+  title: 'Supported Logitech devices on Linux',
   description:
     'OpenLogi supports any Logitech device speaking HID++ over Bolt, Unifying, Lightspeed, Bluetooth or USB. Capabilities are discovered from the hardware at runtime.',
 })
