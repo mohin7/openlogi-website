@@ -20,6 +20,10 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       crawlLinks: true,
+      // Write /devices.html, not /devices/index.html: Pages serves the first
+      // at /devices, matching our canonical URLs and sitemap, and redirects
+      // /devices/ to it. The default layout inverts that.
+      autoSubfolderIndex: false,
       routes: ['/', '/docs', '/download', '/devices'],
     },
   },
