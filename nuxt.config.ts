@@ -36,6 +36,12 @@ export default defineNuxtConfig({
     defaultLocale: 'en',
   },
 
+  // Stamped at build time: the site is static, so a build is the only moment
+  // content can change.
+  sitemap: {
+    defaults: { lastmod: new Date().toISOString() },
+  },
+
   // @nuxtjs/seo generates the OG images; this is the shared component.
   ogImage: {
     defaults: { component: 'Default' },
@@ -76,7 +82,10 @@ export default defineNuxtConfig({
       // Prerendered as dark; the script below corrects it before first paint
       // for anyone who chose light or whose OS asks for it.
       htmlAttrs: { lang: 'en', class: 'dark' },
-      link: [{ rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }],
+      link: [
+        { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+      ],
       script: [
         {
           // Must run synchronously in <head>: any later and the dark palette

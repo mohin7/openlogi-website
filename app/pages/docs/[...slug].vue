@@ -35,9 +35,13 @@ const siblings = computed(() => {
 })
 
 // "Installation" alone says nothing in a results page; the suffix says what
-// it is the installation of, and for which platform.
+// it is the installation of, and for which platform. The index is the docs'
+// front door, so it is titled for what people search rather than "Introduction".
+const seoTitle =
+  path.value === '/docs' ? 'Documentation for Logitech on Linux' : `${page.value.title} · Linux docs`
+
 useSeoMeta({
-  title: `${page.value.title} · Linux docs`,
+  title: seoTitle,
   description: page.value.description,
   ogTitle: `${page.value.title} · OpenLogi docs`,
   ogDescription: page.value.description,
