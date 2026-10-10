@@ -19,6 +19,8 @@ const columns = [
   },
 ] as const
 
+const licenceUrl = 'https://www.gnu.org/licenses/gpl-3.0.html'
+
 const year = new Date().getFullYear()
 </script>
 
@@ -90,7 +92,7 @@ const year = new Date().getFullYear()
             </li>
             <li>
               <a
-                :href="`${site.repo}/blob/master/LICENSE`"
+                :href="licenceUrl"
                 target="_blank"
                 rel="noopener noreferrer"
                 class="text-sm text-ink-3 transition-colors hover:text-ink"
