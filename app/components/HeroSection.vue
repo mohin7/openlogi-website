@@ -5,7 +5,10 @@ const el = useReveal()
 // the same facts the transport strip used to state lower down, promoted
 // because they are the product's credibility in one line.
 const tags = ['HID++', 'Bolt', 'Unifying', 'Lightspeed', 'Bluetooth LE', 'USB']
-const formats = ['.deb', '.rpm', 'AppImage']
+const formatLabels: Record<string, string> = { deb: '.deb', rpm: '.rpm', appimage: 'AppImage' }
+const formats = installTargets
+  .filter((t) => t.ready && t.id in formatLabels)
+  .map((t) => formatLabels[t.id]!)
 </script>
 
 <template>
@@ -93,7 +96,7 @@ const formats = ['.deb', '.rpm', 'AppImage']
             <span v-if="i > 0" class="text-line-strong">/</span>
             {{ f }}
           </span>
-          <span class="text-line-strong">·</span>
+          <span v-if="formats.length" class="text-line-strong">·</span>
           <span>{{ site.licence }}</span>
         </p>
         <p class="caption mt-2 normal-case! tracking-normal!">

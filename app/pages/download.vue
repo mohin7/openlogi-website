@@ -1,8 +1,16 @@
 <script setup lang="ts">
-const selected = ref<string>('deb')
+const sourceCommand = installTargets.find((t) => t.id === 'source')!.command
+const hasPackages = installTargets.some((t) => t.ready && t.id !== 'source')
+
+const selected = ref<string>(installTargets.find((t) => t.ready)!.id)
 const current = computed(
   () => installTargets.find((t) => t.id === selected.value) ?? installTargets[0]!,
 )
+const heading = computed(() => {
+  if (current.value.id === 'source') return 'Build from source'
+  if (current.value.id === 'appimage') return 'Run the AppImage'
+  return `Install on ${current.value.label}`
+})
 
 // Preselect the visitor's distro. Done on mount rather than during render
 // because the page is prerendered — the HTML is built once, with no visitor
@@ -19,14 +27,14 @@ onMounted(() => {
 })
 
 useSeoMeta({
-  title: 'Download for Linux (.deb, .rpm, AppImage)',
+  title: 'Download for Linux',
   description:
-    'Install OpenLogi on Debian, Ubuntu, Fedora, Arch Linux, or build it from source. Free and open source under GPL-3.0.',
+    'Get OpenLogi for Linux: configure Logitech mice and keyboards natively. Free and open source under GPL-3.0, with no account and no telemetry.',
 })
 
 defineOgImageComponent('Default', {
   title: 'Download OpenLogi',
-  description: 'Debian, Ubuntu, Fedora, Arch, or from source.',
+  description: 'Free and open source. No account, no telemetry.',
 })
 </script>
 
@@ -85,9 +93,7 @@ defineOgImageComponent('Default', {
 
         <div class="card card-lit mt-6 p-6">
           <div class="flex flex-wrap items-baseline justify-between gap-2">
-            <p class="text-sm font-medium">
-              Install on {{ current.label }}
-            </p>
+            <p class="text-sm font-medium">{{ heading }}</p>
             <p v-if="detected" class="text-[13px] text-ink-3">
               Detected from your browser
             </p>
@@ -130,12 +136,17 @@ defineOgImageComponent('Default', {
             </p>
           </template>
 
-          <!-- The source tab. -->
+          <!-- The source tab, and any distro without a published package. -->
           <template v-else>
             <p class="mt-1 text-[13px] text-ink-3">
-              Requires a Rust toolchain and Node.js 20 or newer.
+              <template v-if="current.id !== 'source'">
+                There is no {{ current.label }} package yet, so build it from
+                source. This
+              </template>
+              <template v-else>Building from source</template>
+              requires a Rust toolchain and Node.js 20 or newer.
             </p>
-            <CodeBlock class="mt-4" :code="current.command" label="terminal" />
+            <CodeBlock class="mt-4" :code="sourceCommand" label="terminal" />
           </template>
         </div>
 
@@ -144,11 +155,11 @@ defineOgImageComponent('Default', {
           <a
             :href="`${site.repo}/releases`"
             class="text-ink-2 underline underline-offset-4 transition-colors hover:text-ink"
-          >GitHub</a>, with
+          >GitHub</a><template v-if="hasPackages">, with
           <a
             :href="assetUrl('SHA256SUMS')"
             class="text-ink-2 underline underline-offset-4 transition-colors hover:text-ink"
-          >checksums</a>.
+          >checksums</a></template>.
         </p>
       </div>
 
