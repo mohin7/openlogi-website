@@ -24,16 +24,19 @@
 
   --color-ink: #0d1117;
   --color-ink-2: #4a5263;
-  --color-ink-3: #6d7585;
+  --color-ink-3: #5a6272;
   --color-ink-4: #949bab;
 
-  --color-accent: #2563eb;
-  --color-accent-hover: #1d4ed8;
+  --color-accent: #1d4ed8;
+  --color-accent-hover: #1e40af;
   --color-accent-dim: #dbe6fe;
-  --color-accent-glow: #2563eb1f;
+  --color-accent-glow: #1d4ed81f;
+  /* Text on an accent fill. White in light; the dark accent is too bright
+     for white (3.2:1), so it takes the canvas colour instead. */
+  --color-on-accent: #ffffff;
 
-  --color-success: #0f9d58;
-  --color-warn: #b45309;
+  --color-success: #0a7340;
+  --color-warn: #92400e;
 
   /* The code-block ground. Darker than the canvas in light mode so syntax
      highlighting keeps its contrast; near-black in dark mode. */
@@ -67,13 +70,14 @@
 
   --color-ink: #f2f4f8;
   --color-ink-2: #a7aebd;
-  --color-ink-3: #6d7585;
+  --color-ink-3: #7f8799;
   --color-ink-4: #464d5c;
 
   --color-accent: #4d8dff;
   --color-accent-hover: #6ba0ff;
   --color-accent-dim: #1c2d4d;
   --color-accent-glow: #4d8dff26;
+  --color-on-accent: #08090c;
 
   --color-success: #39d98a;
   --color-warn: #ffb224;
@@ -123,7 +127,7 @@
 
   ::selection {
     background-color: var(--color-accent);
-    color: white;
+    color: var(--color-on-accent);
   }
 
   :focus-visible {

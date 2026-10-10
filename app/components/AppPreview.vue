@@ -144,7 +144,7 @@ const current = computed(
             v-for="b in bindings"
             :key="b.id"
             type="button"
-            class="absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-300 ease-[var(--ease-out-quint)]"
+            class="absolute -translate-x-1/2 -translate-y-1/2 rounded-full transition-all duration-300 ease-[var(--ease-out-quint)] before:absolute before:-inset-3 before:content-['']"
             :class="
               active === b.id
                 ? 'size-4 bg-accent ring-4 ring-accent/25'

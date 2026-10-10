@@ -15,7 +15,7 @@ const props = withDefaults(
 
 const variants = {
   primary:
-    'bg-accent text-white hover:bg-accent-hover shadow-[0_0_0_1px_var(--color-accent),0_8px_24px_-8px_var(--color-accent-glow)]',
+    'bg-accent text-on-accent hover:bg-accent-hover shadow-[0_0_0_1px_var(--color-accent),0_8px_24px_-8px_var(--color-accent-glow)]',
   secondary:
     'bg-surface-2 text-ink border border-line-strong hover:bg-surface-3 hover:border-ink-4',
   ghost: 'text-ink-2 hover:text-ink hover:bg-surface-2',
