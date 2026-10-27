@@ -137,7 +137,7 @@ export const installTargets = [
     ready: true,
     file: 'git',
     command:
-      'git clone https://github.com/mohin7/openlogi\ncd openlogi\n./scripts/setup.sh',
+      'git clone https://github.com/mohin7/openlogi\ncd openlogi\n./scripts/setup.sh\npnpm install\npnpm app:build',
     detect: undefined,
   },
 ] as const
@@ -169,6 +169,10 @@ export const faqs = [
   {
     q: 'Which devices are supported?',
     a: 'Any Logitech device speaking HID++, over Bolt, Unifying, Lightspeed, Bluetooth or USB. Rather than matching a model list, OpenLogi asks the device which features it implements and shows only those. Cheaper devices expose fewer features — the app tells you which.',
+  },
+  {
+    q: 'How is it different from Solaar or logiops?',
+    a: 'Solaar is a mature device manager that also pairs devices with receivers; logiops is a root daemon configured through a text file. OpenLogi is a desktop app that never runs as root and writes DPI onboard, but it is younger: SmartShift, the thumb wheel and gestures are not implemented yet. It runs alongside Solaar without conflict.',
   },
   {
     q: 'What is the licence?',
