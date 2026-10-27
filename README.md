@@ -78,9 +78,10 @@ app/
   components/content/     components usable from Markdown (::callout)
   components/OgImage/     social card template
   composables/            scroll reveal, theme switching
-  pages/                  index, download, devices, docs/[...slug]
+  pages/                  index, download, devices/, docs/[...slug]
   utils/site.ts           shared copy: nav, features, FAQ, install targets
 content/docs/             the documentation, as Markdown
+content/devices/          per-model guides, served at /devices/<slug>
 ```
 
 ### Editing content
@@ -100,7 +101,13 @@ and the page shows the from-source route instead of a button that 404s.
 
 **Documentation** is Markdown in `content/docs/`. The numeric filename prefix
 sets sidebar order; `title` and `description` in the frontmatter are required
-and validated at build time by `content.config.ts`.
+and validated at build time by `content.config.ts`. An optional `seoTitle`
+replaces `title` in the browser tab and search results.
+
+**Device guides** are Markdown in `content/devices/`. Only write one for a
+model you can describe truthfully: what OpenLogi does on it today and what it
+does not. `status: measured` is reserved for models with a capture from real
+hardware in the app repository.
 
 ### Theming
 

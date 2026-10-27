@@ -1,8 +1,8 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: 'Supported Logitech devices on Linux',
+  title: 'Supported Logitech mice and keyboards on Linux',
   description:
-    'OpenLogi supports any Logitech device speaking HID++ over Bolt, Unifying, Lightspeed, Bluetooth or USB. Capabilities are discovered from the hardware at runtime.',
+    'Which Logitech mice and keyboards work with OpenLogi on Linux: any HID++ device over Bolt, Unifying, Lightspeed, Bluetooth or USB, plus per-model guides.',
 })
 
 defineOgImageComponent('Default', {
@@ -10,38 +10,50 @@ defineOgImageComponent('Default', {
   description: 'Discovered from your hardware, not matched against a list.',
 })
 
+const { data: guides } = await useAsyncData('device-guides', () =>
+  queryCollection('devices')
+    .order('order', 'ASC')
+    .select('path', 'title', 'description', 'models', 'status')
+    .all(),
+)
+
 // Families rather than individual SKUs — the point of the page is that
 // support is not a model list, so listing models would undercut it.
 const families = [
   {
     name: 'MX series',
     examples: 'MX Master 3S, MX Master 3, MX Anywhere 3, MX Vertical',
-    support: 'full',
-    note: 'Extensive onboard configuration, many divertable controls',
+    support: 'partial',
+    note: 'Divertable controls and onboard DPI; SmartShift and the thumb wheel are not supported yet',
+    guide: '/devices/mx-master',
   },
   {
     name: 'Signature series',
     examples: 'M650, M750, MK650',
     support: 'partial',
-    note: 'Fewer onboard slots; most remapping runs host-side',
+    note: 'Measured on the M650: middle, back and forward remappable, onboard DPI, battery',
+    guide: '/devices/signature-m650',
   },
   {
     name: 'G / Lightspeed',
     examples: 'G Pro Wireless, G502, G305',
-    support: 'full',
-    note: 'Onboard DPI and profiles over the Lightspeed receiver',
+    support: 'partial',
+    note: 'Battery and device info; DPI and remapping only where the mouse reports 0x2201 and 0x1B04. Extended DPI (0x2202) and onboard profiles (0x8100) are not supported yet',
+    guide: undefined,
   },
   {
     name: 'MX Keys and ERGO',
     examples: 'MX Keys, MX Keys Mini, ERGO K860',
     support: 'partial',
     note: 'Battery and device info; remapping depends on firmware',
+    guide: '/devices/mx-keys',
   },
   {
     name: 'Receivers',
     examples: 'Bolt, Unifying, Lightspeed',
     support: 'full',
-    note: 'Enumeration, pairing state and notification forwarding',
+    note: 'Enumeration and notification forwarding; pair new devices with Solaar',
+    guide: undefined,
   },
 ] as const
 
@@ -49,6 +61,10 @@ const tones = {
   full: 'border-success/30 bg-success/10 text-success',
   partial: 'border-warn/30 bg-warn/10 text-warn',
 } as const
+
+function guideTitle(path: string) {
+  return guides.value?.find((g) => g.path === path)?.title ?? 'Device guide'
+}
 </script>
 
 <template>
@@ -141,7 +157,39 @@ const tones = {
               {{ f.examples }}
             </p>
             <p class="mt-2 text-sm text-ink-2">{{ f.note }}</p>
+            <NuxtLink
+              v-if="f.guide"
+              :to="f.guide"
+              class="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-accent transition-colors hover:text-ink"
+            >
+              {{ guideTitle(f.guide) }}
+              <Icon name="lucide:arrow-right" class="size-3.5" />
+            </NuxtLink>
           </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Per-model guides -->
+    <section v-if="guides?.length" class="mx-auto mt-16 max-w-4xl">
+      <h2 class="text-lg font-semibold">Device guides</h2>
+      <p class="mt-2 max-w-2xl text-sm text-ink-2">
+        What OpenLogi does today on specific models, what it does not do yet,
+        and how to check your own unit.
+      </p>
+
+      <ul class="mt-6 grid gap-3 sm:grid-cols-3">
+        <li v-for="g in guides" :key="g.path">
+          <NuxtLink
+            :to="g.path"
+            class="card card-lit flex h-full flex-col p-5 hover:border-line-strong hover:bg-surface-2"
+          >
+            <span class="text-[15px] font-semibold">{{ g.title }}</span>
+            <span class="mt-1.5 font-mono text-[12px] text-ink-3">{{ g.models }}</span>
+            <span class="mt-3 text-[13px] text-ink-3">
+              {{ g.status === 'measured' ? 'Measured on real hardware' : 'From the features the device reports' }}
+            </span>
+          </NuxtLink>
         </li>
       </ul>
     </section>

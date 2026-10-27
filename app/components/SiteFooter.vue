@@ -6,6 +6,15 @@ const columns = [
       { label: 'Features', to: '/#features' },
       { label: 'Supported devices', to: '/devices' },
       { label: 'Download', to: '/download' },
+      { label: 'vs Solaar and logiops', to: '/docs/alternatives' },
+    ],
+  },
+  {
+    title: 'Devices',
+    links: [
+      { label: 'MX Master', to: '/devices/mx-master' },
+      { label: 'MX Keys', to: '/devices/mx-keys' },
+      { label: 'Signature M650', to: '/devices/signature-m650' },
     ],
   },
   {
@@ -27,7 +36,7 @@ const year = new Date().getFullYear()
 <template>
   <footer class="rule-t bg-surface/40">
     <div class="frame py-16">
-      <div class="grid gap-12 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
+      <div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1fr_1fr]">
         <div>
           <NuxtLink to="/" class="flex items-center gap-2.5 font-semibold">
             <BrandMark class="size-7" />
