@@ -1,0 +1,5 @@
+# Cloudflare Pages response headers.
+# HSTS covers this host only: includeSubDomains would bind every other
+# uxatom.com subdomain to HTTPS too, which is not this project's call.
+/*
+  Strict-Transport-Security: max-age=31536000
