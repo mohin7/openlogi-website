@@ -2,6 +2,12 @@
 const sourceCommand = installTargets.find((t) => t.id === 'source')!.command
 const hasPackages = installTargets.some((t) => t.ready && t.id !== 'source')
 
+const distroGuides = [
+  { label: 'Ubuntu and Debian', to: '/docs/installation#ubuntu-and-debian' },
+  { label: 'Fedora', to: '/docs/installation#fedora' },
+  { label: 'Arch Linux', to: '/docs/installation#arch-linux' },
+] as const
+
 const selected = ref<string>(installTargets.find((t) => t.ready)!.id)
 const current = computed(
   () => installTargets.find((t) => t.id === selected.value) ?? installTargets[0]!,
@@ -27,9 +33,9 @@ onMounted(() => {
 })
 
 useSeoMeta({
-  title: 'Download for Linux',
+  title: 'Download for Linux: Ubuntu, Fedora, Arch',
   description:
-    'Get OpenLogi for Linux: configure Logitech mice and keyboards natively. Free and open source under GPL-3.0, with no account and no telemetry.',
+    'Get OpenLogi, free and open source, for Ubuntu, Debian, Fedora or Arch Linux. No account, no telemetry. Build from source until packages are published.',
 })
 
 defineOgImageComponent('Default', {
@@ -147,6 +153,16 @@ defineOgImageComponent('Default', {
               requires a Rust toolchain and Node.js 20 or newer.
             </p>
             <CodeBlock class="mt-4" :code="sourceCommand" label="terminal" />
+            <p class="mt-3 text-[13px] text-ink-3">
+              Dependencies and the install step for your distribution:
+              <template v-for="(g, i) in distroGuides" :key="g.to">
+                <template v-if="i > 0"> · </template>
+                <NuxtLink
+                  :to="g.to"
+                  class="text-ink-2 underline underline-offset-4 transition-colors hover:text-ink"
+                >{{ g.label }}</NuxtLink>
+              </template>
+            </p>
           </template>
         </div>
 

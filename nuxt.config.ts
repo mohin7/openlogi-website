@@ -1,4 +1,35 @@
+import { execFileSync } from 'node:child_process'
+import { readdirSync } from 'node:fs'
 import tailwindcss from '@tailwindcss/vite'
+
+const buildTime = new Date().toISOString()
+
+// Last commit that touched any of `paths`. Falls back to the build time when
+// git has no answer — no .git directory, or a clone too shallow to know.
+function lastCommit(...paths: string[]): string {
+  try {
+    const out = execFileSync('git', ['log', '-1', '--format=%cI', '--', ...paths], {
+      encoding: 'utf8',
+    }).trim()
+    return out ? new Date(out).toISOString() : buildTime
+  } catch {
+    return buildTime
+  }
+}
+
+// One sitemap entry per Markdown file, with the numeric sort prefix stripped
+// the same way Nuxt Content strips it when it builds the page path.
+function contentRoutes(dir: string, base: string) {
+  return readdirSync(`content/${dir}`)
+    .filter((file) => file.endsWith('.md'))
+    .map((file) => {
+      const slug = file.replace(/^\d+\./, '').replace(/\.md$/, '')
+      return {
+        loc: slug === 'index' ? base : `${base}/${slug}`,
+        lastmod: lastCommit(`content/${dir}/${file}`),
+      }
+    })
+}
 
 // The marketing site for OpenLogi. Deliberately a separate project from the
 // app: it ships on its own cadence, to a CDN, with no Rust toolchain in sight.
@@ -36,10 +67,17 @@ export default defineNuxtConfig({
     defaultLocale: 'en',
   },
 
-  // Stamped at build time: the site is static, so a build is the only moment
-  // content can change.
+  // lastmod is the last commit to the files behind each page. Stamping every
+  // URL with the build time instead tells crawlers everything changed on each
+  // deploy, which teaches them to ignore the field.
   sitemap: {
-    defaults: { lastmod: new Date().toISOString() },
+    urls: [
+      { loc: '/', lastmod: lastCommit('app/pages/index.vue', 'app/components', 'app/utils/site.ts') },
+      { loc: '/download', lastmod: lastCommit('app/pages/download.vue', 'app/utils/site.ts') },
+      { loc: '/devices', lastmod: lastCommit('app/pages/devices/index.vue', 'content/devices') },
+      ...contentRoutes('docs', '/docs'),
+      ...contentRoutes('devices', '/devices'),
+    ],
   },
 
   // @nuxtjs/seo generates the OG images; this is the shared component.
@@ -83,6 +121,9 @@ export default defineNuxtConfig({
       // for anyone who chose light or whose OS asks for it.
       htmlAttrs: { lang: 'en', class: 'dark' },
       link: [
+        // The .ico is for clients that request /favicon.ico directly and
+        // ignore <link> tags; browsers that read SVG prefer the second.
+        { rel: 'icon', href: '/favicon.ico', sizes: '48x48' },
         { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
         { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
       ],
